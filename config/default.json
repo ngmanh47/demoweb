@@ -1,0 +1,14 @@
+{
+    "mysql": {
+        "connectionLimit": 50,
+        "host": "db4free.net",
+        "port": 3306,
+        "user": "vanhoa1705",
+        "password": "Vanhoa00#",
+        "database": "auctions"
+        
+    },
+    "paginate": {
+        "limit": 8
+    }
+}

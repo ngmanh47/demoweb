@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {{>head}}
+</head>
+
+<body>
+    {{>header}}
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2 menu">
+                {{>leftmenu}}
+            </div>
+            <div class="col-sm-10">
+                    {{{body}}}
+            </div>
+        </div>
+    </div>
+    <!-- /CONTENT -->
+
+    {{>footer}}
+
+    {{>foot}}
+
+    {{{_sections.js}}}
+
+</body>
+
+</html>

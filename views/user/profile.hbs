@@ -1,0 +1,312 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="/assets/css/user.css">
+{{/section}}
+<script>
+	document.title = "{{user.name}}";
+</script>
+<div class="container emp-profile">
+	<div class="row">
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" href="#profile" role="tab" data-toggle="tab">Trang cá nhân</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#favProduct" role="tab" data-toggle="tab">Sản phẩm yêu thích</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#aucProduct" role="tab" data-toggle="tab">Sản phẩm đang đấu giá</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#selProduct" role="tab" data-toggle="tab">Sản phẩm đã đăng bán</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#wonlist" role="tab" data-toggle="tab">Sản phẩm đã thắng</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#rate" role="tab" data-toggle="tab">Xem đánh giá</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane fade show active" id="profile">
+			<div class="row mt-5">
+				<div class="col-md-4">
+					<div class="profile-img">
+						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
+							alt="" />
+						<div class="file btn btn-lg btn-primary">
+							Change Photo
+							<input type="file" name="file" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-5">
+					<div class="profile-head">
+						<h5>
+							{{user.name}}
+						</h5>
+						<p class="proile-rating">RANKINGS : <span>{{#if avg}} {{avg}}/10 {{else}} 0/10{{/if}}</span>
+						</p>
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" id="home-tab" data-toggle="tab" href="#About" role="tab"
+									aria-controls="home" aria-selected="true">About</a>
+							</li>
+							{{!-- 								<li class="nav-item">
+									<a class="nav-link" id="profile-tab" data-toggle="tab" href="#Timeline"
+									role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
+								</li> --}}
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="edit_profile">
+						<button class="profile-edit-btn"
+							onclick="window.location.href='/user/profile/{{user.id}}/changeprofile';">
+							Edit Profile
+						</button>
+					</div>
+					<div>
+						<button class="profile-edit-btn"
+							onclick="window.location.href='/user/profile/{{user.id}}/changepassword';">
+							Change password
+						</button>
+					</div>
+					{{#ifCond user.Permission 0}}
+					<form method="POST">
+						<div class="mt-2">
+							<input type="hidden" name="id" value="{{user.id}}">
+							<button class="profile-edit-btn" type="submit"
+								formaction="/user/profile/{{user.id}}/upgrade_suggest">
+								Upgrade Seller
+							</button>
+						</div>
+					</form>
+					{{/ifCond}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8">
+					<div class="tab-content profile-tab" id="myTabContent">
+						<div class="tab-pane fade show active ml-5" id="About" role="tablist">
+							<div class="row">
+								<div class="col-md-6">
+									<label>User Name</label>
+								</div>
+								<div class="col-md-6">
+									<p>{{user.username}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<label>Name</label>
+								</div>
+								<div class="col-md-6">
+									<p>{{user.name}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<label>Email</label>
+								</div>
+								<div class="col-md-6">
+									<p>{{user.email}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<label>Phone</label>
+								</div>
+								<div class="col-md-6">
+									<p>{{user.Phone}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<label>Permission</label>
+								</div>
+								<div class="col-md-6">
+									<p>{{#if user.Permission}}Seller
+										{{else}}Bidder
+										{{/if}}
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane fade" id="favProduct">
+			<div class="row">
+
+				{{#if this.watchlist_empty}}
+				<div class="card-body">
+					<p class="card-text">
+						Không có dữ liệu.
+					</p>
+				</div>
+				{{else}}
+				{{#each this.watchlist}}
+				<div class="col-sm-3">
+					<div class="card product" style="height: 400px">
+						<img class="card-header bg-transparent" src="/images/product/{{id_pro}}_1.jpg"
+							onclick="window.location.href = '/product/{{id_pro}}';" style="height: 170px">
+						<div class="card-body tdspkhac" onclick="window.location.href = '/product/{{id_pro}}';">
+							<a href="/product/{{id_pro}}">{{name_pro}}</a>
+						</div>
+						<div class="card-footer bg-transparent border-0 add-to-cart">
+							<h6 class="product-price">{{format current_price}}</h6>
+							<button class="add-to-cart-btn"><i class="fa fa-eye"></i> View more</button>
+						</div>
+					</div>
+				</div>
+				{{/each}}
+				{{/if}}
+
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane fade" id="aucProduct">
+			<table class="table table-hover mt-2">
+				<div class="row">
+
+					{{#if this.myAuction_empty}}
+					<div class="card-body">
+						<p class="card-text">
+							Không có dữ liệu.
+						</p>
+					</div>
+					{{else}}
+					{{#each this.myAuction}}
+					<div class="col-sm-3">
+						<div class="card product" style="height: 400px">
+							<div class="product-img">
+								<img class="card-header bg-transparent" src="/images/product/{{id_pro}}_1.jpg"
+									onclick="window.location.href = '/product/{{id_pro}}';" style="height: 170px">
+								{{#if isWon}}
+								<div class="product-label">
+									<span class="new">TOP</span>
+								</div>
+								{{/if}}
+							</div>
+							<div class="card-body tdspkhac" onclick="window.location.href = '/product/{{id_pro}}';">
+								<a href="/product/{{id_pro}}">{{name_pro}}</a>
+							</div>
+							<div class="card-footer bg-transparent border-0 add-to-cart">
+								<h6 class="product-price">{{format current_price}}</h6>
+								<button class="add-to-cart-btn"><i class="fa fa-eye"></i> View more</button>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+					{{/if}}
+
+				</div>
+			</table>
+		</div>
+		<div role="tabpanel" class="tab-pane fade" id="selProduct">
+			<table class="table table-hover mt-2">
+				<div class="row">
+
+					{{#if this.myProduct_empty}}
+					<div class="card-body">
+						<p class="card-text">
+							Không có dữ liệu.
+						</p>
+					</div>
+					{{else}}
+					{{#each this.myProduct}}
+					<div class="col-sm-3">
+						<div class="card product" style="height: 400px">
+							<div class="product-img">
+								<img class="card-header bg-transparent" src="/images/product/{{id_pro}}_1.jpg"
+									onclick="window.location.href = '/product/{{id_pro}}';" style="height: 170px">
+								{{#ifCond status_pro 0}}
+								<div class="product-label">
+									<span class="new">SOLD</span>
+								</div>
+								{{/ifCond}}
+							</div>
+							<div class="card-body tdspkhac" onclick="window.location.href = '/product/{{id_pro}}';">
+								<a href="/product/{{id_pro}}">{{name_pro}}</a>
+							</div>
+							<div class="card-footer bg-transparent border-0 add-to-cart">
+								<h6 class="product-price">{{format current_price}}</h6>
+								<button class="add-to-cart-btn"><i class="fa fa-eye"></i> View more</button>
+							</div>
+						</div>
+					</div>
+
+					{{/each}}
+
+					{{/if}}
+
+				</div>
+			</table>
+		</div>
+		<div role="tabpanel" class="tab-pane fade" id="wonlist">
+			<table class="table table-hover mt-2">
+				<div class="row">
+					{{#if this.myWonlist_empty}}
+					<div class="card-body">
+						<p class="card-text">
+							Không có dữ liệu.
+						</p>
+					</div>
+					{{else}}
+					{{#each this.myWonlist}}
+					<div class="col-sm-3">
+						<div class="card product" style="height: 400px">
+							<div class="product-img">
+								<img class="card-header bg-transparent" src="/images/product/{{id_pro}}_1.jpg"
+									onclick="window.location.href = '/product/{{id_pro}}';" style="height: 170px">
+							</div>
+							<div class="card-body tdspkhac" onclick="window.location.href = '/product/{{id_pro}}';">
+								<a href="/product/{{id_pro}}">{{name_pro}}</a>
+							</div>
+							<div class="card-footer bg-transparent border-0 add-to-cart">
+								<h6 class="product-price">{{format current_price}}</h6>
+								<button class="add-to-cart-btn"><i class="fa fa-eye"></i> View more</button>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+					{{/if}}
+				</div>
+
+			</table>
+		</div>
+		<div role="tabpanel" class="tab-pane fade" id="rate">
+			<table class="table table-bordered">
+				{{#if rating}}
+
+				<tbody>
+					<tr>
+						<td width="20%">UserName</td>
+						<td width="10%">Mark</td>
+						<td>Comment</td>
+					</tr>
+					{{#each this.rating}}
+					<tr>
+						<td width="20%">{{person_rating}}</td>
+						<td width="10%">{{mark}}</td>
+						<td>{{comment}}</td>
+					</tr>
+					{{/each}}
+					{{else}}
+					<div class="card-body">
+						<p class="card-text">
+							Không có dữ liệu.
+						</p>
+					</div>
+				</tbody>
+				{{/if}}
+
+			</table>
+		</div>
+
+	</div>
+
+
+</div>
